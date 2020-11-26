@@ -11,6 +11,7 @@ const FoodSearch = (props) => {
 
   return (
     <input
+      className="input"
       name="search"
       type="text"
       placeholder="Search for your food..."

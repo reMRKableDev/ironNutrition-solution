@@ -9,10 +9,11 @@ import foodList from './foods.json';
 
 class App extends Component {
   state = {
-    foodState: foodList, // looks at the data that is coming from .json file and from form
-    filteredFoodListState: [], // filtered food list
+    foodState: foodList,
+    filteredFoodListState: [],
     form: false,
     searching: false,
+    todaysFoodList: [],
   };
 
   // handleRenderForm() - it changes the value of "form" in our state. Helps with rendering the food form.
@@ -56,45 +57,74 @@ class App extends Component {
     this.setState(stateCopy);
   };
 
+  // Add new food to today's list
+  handleAddFoodToTodaysList = (foodObject) => {
+    // Copy state
+    const stateCopy = { ...this.state };
+
+    // Calculate calories and quantity
+    foodObject.calories *= foodObject.quantity;
+
+    // Push new value to
+    stateCopy.todaysFoodList.push(foodObject);
+    this.setState(stateCopy);
+  };
+
+  // Get total value
+  handleCalculateTotalCalories = () =>
+    this.state.todaysFoodList.reduce((acc, val) => acc + val.calories, 0);
+
   render() {
     return (
       <div className="App">
+        <h1>Iron Nutrition App</h1>
         {/* Search Bar */}
         <FoodSearch handleFilterSearch={this.handleFilterFoods} />
 
-        <br />
-
         {/* Button to toggle our form */}
-        <button onClick={this.handleRenderForm}>Add Food</button>
+        <button className="button" onClick={this.handleRenderForm}>
+          Add Food
+        </button>
 
         {/* Toggle the form when this.state.form has the value of "true"*/}
         {this.state.form && (
           <FoodForm handleLiftFoodFormState={this.handleAddNewFood} />
         )}
 
-        {/* Mapping through the state of foods and passing them to the FoodBox component */}
-        {this.state.searching
-          ? this.state.filteredFoodListState.map((foodItem, index) => (
-              <FoodBox key={index} {...foodItem} />
-            ))
-          : this.state.foodState.map((foodItem, index) => (
-              <FoodBox key={index} {...foodItem} />
-            ))}
+        <div>
+          <div style={{ width: '70%', float: 'left' }}>
+            {/* Mapping through the state of foods and passing them to the FoodBox component */}
+            {this.state.searching
+              ? this.state.filteredFoodListState.map((foodItem, index) => (
+                  <FoodBox
+                    key={index}
+                    {...foodItem}
+                    handleAddFood={this.handleAddFoodToTodaysList}
+                  />
+                ))
+              : this.state.foodState.map((foodItem, index) => (
+                  <FoodBox
+                    key={index}
+                    {...foodItem}
+                    handleAddFood={this.handleAddFoodToTodaysList}
+                  />
+                ))}
+          </div>
+          <div style={{ width: '30%', float: 'right' }}>
+            <h2>Today's Food!</h2>
+            <ul>
+              {this.state.todaysFoodList.map((element, index) => (
+                <li key={index}>
+                  {element.quantity} {element.name} = {element.calories} cal
+                </li>
+              ))}
+              <p>Total: {this.handleCalculateTotalCalories()} calories</p>
+            </ul>
+          </div>
+        </div>
       </div>
     );
   }
 }
-
-/* const App = () => {
-  const [foodState, setFoodState] = useState(foodList);
-
-  return (
-    <div>
-      {foodState.map((foodItem, index) => (
-        <FoodBox key={index} {...foodItem} />
-      ))}
-    </div>
-  );
-}; */
 
 export default App;
