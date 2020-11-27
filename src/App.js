@@ -65,8 +65,9 @@ class App extends Component {
     // Calculate calories and quantity
     foodObject.calories *= foodObject.quantity;
 
-    // Push new value to
+    // Push new value to todaysFoodList
     stateCopy.todaysFoodList.push(foodObject);
+
     this.setState(stateCopy);
   };
 
@@ -110,7 +111,9 @@ class App extends Component {
                   />
                 ))}
           </div>
+
           <div style={{ width: '30%', float: 'right' }}>
+            {/* The list of today's food */}
             <h2>Today's Food!</h2>
             <ul>
               {this.state.todaysFoodList.map((element, index) => (

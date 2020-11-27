@@ -44,7 +44,6 @@ class FoodBox extends Component {
                     this.props.handleAddFood({
                       name: this.props.name,
                       calories: this.props.calories,
-                      image: this.props.image,
                       quantity: this.state.quantity,
                     });
                   }}
