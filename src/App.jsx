@@ -1,11 +1,16 @@
 import React from 'react';
-import './App.css';
+import FoodList from './components/FoodList';
 
 function App() {
   return (
-    <div className="App">
-      <h1>Iron Nutrition</h1>
-    </div>
+    <main className="container">
+      <section className="hero">
+        <div className="hero-body">
+          <h1 className="title is-1 is-centered">Iron Nutrition</h1>
+        </div>
+      </section>
+      <FoodList />
+    </main>
   );
 }
 
